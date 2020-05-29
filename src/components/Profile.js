@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-paper'
+import { StyleSheet, TouchableOpacity, Image } from 'react-native'
 
-const uri = 'https://miro.medium.com/max/3150/1*i7J-V-nfvMVGo7T9-kID6Q.jpeg'
+const uri =
+    'https://cdn3.iconfinder.com/data/icons/social-media-circle/512/circle-twitter-512.png'
 
 const Profile = ({ navigation, size = 40 }) => {
     return (
@@ -10,7 +10,10 @@ const Profile = ({ navigation, size = 40 }) => {
             style={styles.container}
             onPress={() => navigation.toggleDrawer()}
         >
-            <Avatar.Image source={{ uri }} size={size} />
+            <Image
+                source={{ uri }}
+                style={{ width: size, height: size, borderRadius: size / 2 }}
+            />
         </TouchableOpacity>
     )
 }

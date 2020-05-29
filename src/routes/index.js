@@ -2,59 +2,59 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { Provider, DefaultTheme, useTheme } from 'react-native-paper'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Provider, DefaultTheme } from 'react-native-paper'
 import color from 'color'
-
 import { Login, AlertDetails, Subjects, Reports, Alerts } from '../screens'
 import { Header, DrawerContent } from '../components/'
+import TabBar from '../components/TabBar'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-const Tab = createMaterialBottomTabNavigator()
+const Tab = createBottomTabNavigator()
+const activeTintColor = '#620ee8'
+const inactiveTintColor = color(activeTintColor)
+    .grayscale()
+    .alpha(0.6)
+    .string()
 
-const Tabs = () => {
-    const { surface, primary, text } = useTheme().colors
+const iconProps = { color: inactiveTintColor, size: 24 }
 
-    const tabBarColor = surface
-
-    return (
-        <Tab.Navigator
-            initialRouteName="Subjects"
-            backBehavior="initialRoute"
-            shifting={true}
-            activeColor={primary}
-            inactiveColor={color(text)
-                .alpha(0.5)
-                .rgb()
-                .string()}
-            sceneAnimationEnabled={false}
-        >
-            <Tab.Screen
-                name="Subjects"
-                component={Subjects}
-                options={{
-                    tabBarIcon: 'home-account',
-                    tabBarColor
-                }}
-            />
-            <Tab.Screen
-                name="Alerts"
-                component={Alerts}
-                options={{
-                    tabBarIcon: 'bell-outline',
-                    tabBarColor
-                }}
-            />
-            <Tab.Screen
-                name="Reports"
-                component={Reports}
-                options={{
-                    tabBarIcon: 'message-text-outline',
-                    tabBarColor
-                }}
-            />
-        </Tab.Navigator>
-    )
-}
+const Tabs = () => (
+    <Tab.Navigator
+        tabBarOptions={{
+            activeTintColor,
+            inactiveTintColor
+        }}
+        tabBar={TabBar}
+    >
+        <Tab.Screen
+            name="Subjects"
+            component={Subjects}
+            options={{
+                tabBarLabel: 'Subjects',
+                tabBarIcon: () => <Icon name="home-account" {...iconProps} />
+            }}
+        />
+        <Tab.Screen
+            name="Alerts"
+            component={Alerts}
+            options={{
+                tabBarLabel: 'Alerts',
+                tabBarIcon: () => <Icon name="bell-outline" {...iconProps} />
+            }}
+        />
+        <Tab.Screen
+            name="Reports"
+            component={Reports}
+            options={{
+                tabBarLabel: 'Reports',
+                tabBarIcon: () => (
+                    <Icon name="message-text-outline" {...iconProps} />
+                )
+            }}
+        />
+    </Tab.Navigator>
+)
 
 const Stack = createStackNavigator()
 
@@ -96,7 +96,7 @@ const { Navigator, Screen } = createDrawerNavigator()
 
 const theme = {
     ...DefaultTheme,
-    colors: { ...DefaultTheme.colors, primary: '#1ba1f2' }
+    colors: { ...DefaultTheme.colors, primary: activeTintColor }
 }
 
 export default () => (
