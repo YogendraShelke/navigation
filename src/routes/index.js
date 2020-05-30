@@ -1,14 +1,20 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+    createStackNavigator,
+    TransitionPresets
+} from '@react-navigation/stack'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Provider, DefaultTheme } from 'react-native-paper'
 import color from 'color'
-import { Login, AlertDetails, Subjects, Reports, Alerts } from '../screens'
-import { Header, DrawerContent } from '../components/'
+import { Login, ToDo, Local, Reports, Cloud } from '../screens'
+import { Header, DrawerContent, ActionSheet } from '../components/'
 import TabBar from '../components/TabBar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet } from 'react-native'
+import ModalHeader from '../components/ModalHeader'
 
 const Tab = createBottomTabNavigator()
 const activeTintColor = '#620ee8'
@@ -17,7 +23,18 @@ const inactiveTintColor = color(activeTintColor)
     .alpha(0.6)
     .string()
 
-const iconProps = { color: inactiveTintColor, size: 24 }
+export const StackScreen = {
+    login: 'Login',
+    tabs: 'Tabs',
+    toDo: 'ToDo',
+    sheet: 'Sheet'
+}
+
+export const TabScreen = {
+    local: 'Local',
+    cloud: 'Cloud',
+    reports: 'Reports'
+}
 
 const Tabs = () => (
     <Tab.Navigator
@@ -28,68 +45,108 @@ const Tabs = () => (
         tabBar={TabBar}
     >
         <Tab.Screen
-            name="Subjects"
-            component={Subjects}
+            name={TabScreen.local}
+            component={Local}
             options={{
-                tabBarLabel: 'Subjects',
-                tabBarIcon: () => <Icon name="home-account" {...iconProps} />
+                tabBarLabel: TabScreen.local,
+                tabBarIcon: props => <Icon name="database" {...props} />
             }}
         />
         <Tab.Screen
-            name="Alerts"
-            component={Alerts}
+            name={TabScreen.cloud}
+            component={Cloud}
             options={{
-                tabBarLabel: 'Alerts',
-                tabBarIcon: () => <Icon name="bell-outline" {...iconProps} />
+                tabBarLabel: TabScreen.cloud,
+                tabBarIcon: props => <Icon name="cloud" {...props} />
             }}
         />
         <Tab.Screen
-            name="Reports"
+            name={TabScreen.reports}
             component={Reports}
             options={{
-                tabBarLabel: 'Reports',
-                tabBarIcon: () => (
-                    <Icon name="message-text-outline" {...iconProps} />
-                )
+                tabBarLabel: TabScreen.reports,
+                tabBarIcon: props => <Icon name="chart-arc" {...props} />
             }}
         />
     </Tab.Navigator>
 )
 
-const Stack = createStackNavigator()
+const MainStack = createStackNavigator()
 
-const StackNavigator = () => (
-    <Stack.Navigator
-        headerMode="screen"
-        screenOptions={{
-            header: props => <Header {...props} />
-        }}
+const styles = StyleSheet.create({
+    safeArea: { flex: 1, backgroundColor: 'white' }
+})
+
+const MainNavigator = () => (
+    <SafeAreaView style={styles.safeArea}>
+        <MainStack.Navigator
+            headerMode="screen"
+            screenOptions={{
+                header: props => <Header {...props} />
+            }}
+        >
+            <MainStack.Screen
+                options={{
+                    headerShown: false
+                }}
+                name={StackScreen.login}
+                component={Login}
+            />
+            <MainStack.Screen
+                name={StackScreen.tabs}
+                component={Tabs}
+                options={({ route: { state } }) => {
+                    const headerTitle = state
+                        ? state.routes[state.index].name
+                        : TabScreen.local
+                    return { headerTitle }
+                }}
+            />
+        </MainStack.Navigator>
+    </SafeAreaView>
+)
+
+const RootStack = createStackNavigator()
+
+const RootNavigator = () => (
+    <RootStack.Navigator
+        screenOptions={({ route, navigation }) => ({
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            headerStatusBarHeight:
+                navigation.dangerouslyGetState().routes.indexOf(route) > 0
+                    ? 0
+                    : undefined,
+            ...TransitionPresets.ModalPresentationIOS
+        })}
+        mode="modal"
     >
-        <Stack.Screen
+        <RootStack.Screen
             options={{
                 headerShown: false
             }}
-            name="Login"
-            component={Login}
+            name="main"
+            component={MainNavigator}
         />
-        <Stack.Screen
-            name="Tabs"
-            component={Tabs}
-            options={({ route: { state } }) => {
-                const headerTitle = state
-                    ? state.routes[state.index].name
-                    : 'Subjects'
-                return { headerTitle }
-            }}
-        />
-        <Stack.Screen
-            name="AlertDetails"
-            component={AlertDetails}
+        <RootStack.Screen
+            name={StackScreen.toDo}
+            component={ToDo}
             options={{
-                headerTitle: 'Alert Details'
+                headerTitle: StackScreen.toDo,
+                header: props => <ModalHeader {...props} />,
+                headerMode: 'screen'
             }}
         />
-    </Stack.Navigator>
+        <RootStack.Screen
+            options={{
+                headerShown: false,
+                cardStyle: { backgroundColor: 'transparent' },
+                cardOverlayEnabled: true
+            }}
+            name={StackScreen.sheet}
+            component={ActionSheet}
+        />
+    </RootStack.Navigator>
 )
 
 const { Navigator, Screen } = createDrawerNavigator()
@@ -103,7 +160,7 @@ export default () => (
     <Provider theme={theme}>
         <NavigationContainer>
             <Navigator drawerContent={props => <DrawerContent {...props} />}>
-                <Screen name="Home" component={StackNavigator} />
+                <Screen name="Home" component={RootNavigator} />
             </Navigator>
         </NavigationContainer>
     </Provider>

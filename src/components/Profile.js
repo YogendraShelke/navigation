@@ -1,8 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, Image } from 'react-native'
 
-const uri =
-    'https://cdn3.iconfinder.com/data/icons/social-media-circle/512/circle-twitter-512.png'
+import logo from '../assets/Logo.png'
 
 const Profile = ({ navigation, size = 40 }) => {
     return (
@@ -11,7 +10,7 @@ const Profile = ({ navigation, size = 40 }) => {
             onPress={() => navigation.toggleDrawer()}
         >
             <Image
-                source={{ uri }}
+                source={logo}
                 style={{ width: size, height: size, borderRadius: size / 2 }}
             />
         </TouchableOpacity>

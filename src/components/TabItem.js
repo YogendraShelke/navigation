@@ -55,7 +55,7 @@ export default ({
                 </Animated.View>
                 <Animated.View style={animatedStyle(iconTranslate)}>
                     <DiagonalTransition visibility={iconVisibility}>
-                        {icon()}
+                        {icon({ color: inactiveTintColor, size: 26 })}
                     </DiagonalTransition>
                 </Animated.View>
                 <Animated.View style={dotStyle} />

@@ -1,15 +1,13 @@
 import React from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Provider } from 'react-redux'
 import Routes from './src/routes'
+import store from './src/store'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-const App = () => {
-    return (
-        <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1 }}>
-                <Routes />
-            </SafeAreaView>
-        </SafeAreaProvider>
-    )
-}
-
-export default App
+export default () => (
+    <SafeAreaProvider>
+        <Provider store={store}>
+            <Routes />
+        </Provider>
+    </SafeAreaProvider>
+)
