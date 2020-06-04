@@ -4,22 +4,33 @@ import { Caption, IconButton } from 'react-native-paper'
 
 const ToDoItem = props => {
     const { todo, onOptions, onPress } = props
-    const { title, body } = todo
+    const { title, description, completed } = todo
+    const status = completed
+        ? { backgroundColor: 'green' }
+        : { backgroundColor: 'tomato' }
+    const text = completed
+        ? { textDecorationLine: 'line-through', textDecorationStyle: 'solid' }
+        : {}
     return (
         <TouchableWithoutFeedback onPress={onPress}>
-            <View style={styles.container}>
-                <View style={styles.section}>
-                    <Caption style={styles.title} numberOfLines={2}>
-                        {title}
+            <View style={styles.outer}>
+                <View style={[styles.left, status]} />
+                <View style={styles.inner}>
+                    <View style={styles.section}>
+                        <Caption style={[styles.title, text]} numberOfLines={1}>
+                            {title}
+                        </Caption>
+                        <IconButton
+                            style={styles.icon}
+                            icon="dots-vertical"
+                            size={20}
+                            onPress={onOptions}
+                        />
+                    </View>
+                    <Caption style={text} numberOfLines={2}>
+                        {description}
                     </Caption>
-                    <IconButton
-                        style={styles.icon}
-                        icon="dots-vertical"
-                        size={20}
-                        onPress={onOptions}
-                    />
                 </View>
-                <Caption numberOfLines={3}>{body}</Caption>
             </View>
         </TouchableWithoutFeedback>
     )
@@ -28,9 +39,17 @@ const ToDoItem = props => {
 export default ToDoItem
 
 const styles = StyleSheet.create({
-    container: {
-        // flex: 1,
+    outer: {
+        flexDirection: 'row',
         margin: 8,
+        flex: 1
+    },
+    left: {
+        width: 4,
+        borderTopLeftRadius: 3,
+        borderBottomLeftRadius: 3
+    },
+    inner: {
         backgroundColor: 'white',
         padding: 16,
         shadowOffset: {
@@ -40,13 +59,14 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowOpacity: 0.2,
         borderRadius: 3,
-        width: '45%'
+        flex: 1
     },
     section: {
         flexDirection: 'row'
     },
     title: {
         fontSize: 16,
+        fontWeight: '600',
         color: 'black',
         flex: 1
     },

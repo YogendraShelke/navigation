@@ -10,10 +10,16 @@ export default (state = defaultState, action) => {
             return { ...state, toDos: state.toDos.concat(action.payload) }
         }
         case UPDATE_TODO: {
-            return { ...state }
+            const toDos = [...state.toDos].map(todo => {
+                return todo.id === action.payload.id ? action.payload : todo
+            })
+            return { ...state, toDos }
         }
         case DELETE_TODO: {
-            return { ...state }
+            return {
+                ...state,
+                toDos: state.toDos.filter(e => e.id !== action.payload.id)
+            }
         }
         default:
             return state

@@ -8,13 +8,12 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Provider, DefaultTheme } from 'react-native-paper'
 import color from 'color'
-import { Login, ToDo, Local, Reports, Cloud } from '../screens'
+import { Login, ToDo, Local, Reports, Contacts } from '../screens'
 import { Header, DrawerContent, ActionSheet } from '../components/'
 import TabBar from '../components/TabBar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
-import ModalHeader from '../components/ModalHeader'
 
 const Tab = createBottomTabNavigator()
 const activeTintColor = '#620ee8'
@@ -32,7 +31,7 @@ export const StackScreen = {
 
 export const TabScreen = {
     local: 'Local',
-    cloud: 'Cloud',
+    contacts: 'Contacts',
     reports: 'Reports'
 }
 
@@ -53,10 +52,10 @@ const Tabs = () => (
             }}
         />
         <Tab.Screen
-            name={TabScreen.cloud}
-            component={Cloud}
+            name={TabScreen.contacts}
+            component={Contacts}
             options={{
-                tabBarLabel: TabScreen.cloud,
+                tabBarLabel: TabScreen.contacts,
                 tabBarIcon: props => <Icon name="cloud" {...props} />
             }}
         />
@@ -132,8 +131,7 @@ const RootNavigator = () => (
             name={StackScreen.toDo}
             component={ToDo}
             options={{
-                headerTitle: StackScreen.toDo,
-                header: props => <ModalHeader {...props} />,
+                headerTitle: 'To Do',
                 headerMode: 'screen'
             }}
         />

@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native'
 const { Header, Action, Content } = Appbar
 
 export default props => {
-    const { scene, navigation } = props
+    const { scene, navigation, onRightAction } = props
     const { primary, surface } = useTheme().colors
     const { headerTitle } = scene.descriptor.options
     const title = headerTitle ? headerTitle : scene.route.name
@@ -19,7 +19,7 @@ export default props => {
             <Action
                 color={primary}
                 icon="content-save-edit"
-                onPress={navigation.goBack}
+                onPress={onRightAction}
             />
         </Header>
     )
