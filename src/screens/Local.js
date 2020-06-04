@@ -68,7 +68,6 @@ const Local = ({ navigation, toDos, dispatch }) => {
     return (
         <>
             <FlatList
-                // numColumns={2}
                 style={styles.list}
                 data={toDos}
                 keyExtractor={keyExtractor}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import { fetchContacts } from '../store/actions/ContactSaga'
+import { fetchContacts } from '../store/actions/ContactActions'
 import Contact from '../components/Contact'
 import { FETCH_CONTACT } from '../store/ActionTypes'
 
